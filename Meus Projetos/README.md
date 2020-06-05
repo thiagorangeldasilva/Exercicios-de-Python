@@ -1,0 +1,1 @@
+Está pasta será dedicada a projetos que pensei em fazer
