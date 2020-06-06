@@ -56,13 +56,13 @@ def printOpcao():
 def confirmaAcao(acao):
     cond = True
     while cond:
-        valor = input('Insira um valor para {0}: R$ '.format(acao))
+        valor = input(f'Insira um valor para {acao}: R$ ')
         if tratarErroIntFloat(valor) == 1 or tratarErroIntFloat(valor) == 2:
             valor = trasnformar(tratarErroIntFloat(valor), valor)  
             while cond:
                 print()
-                print('Valor do ' + acao + ': R$ ' + str(valor).replace('.', ','))      
-                print('Confirma ' + acao + '? (1) Sim / (2) Não')
+                print(f'Valor do {acao}: R$ {valor:.2f}'.replace('.', ','))      
+                print(f'Confirma {acao}? (1) Sim / (2) Não / (3) Menu')
                 opcao = input('Opção escolhida: ')
                 if tratarErroIntFloat(opcao) == 1 or tratarErroIntFloat(opcao) == 2:
                     opcao = trasnformar(tratarErroIntFloat(opcao), opcao)    
@@ -72,6 +72,9 @@ def confirmaAcao(acao):
                     elif opcao == 2:
                         print()
                         break
+                    elif opcao == 3:
+                        print()
+                        return True
                     else:
                         print('Opção inválida.')
                         print()
@@ -84,34 +87,43 @@ def confirmaAcao(acao):
 
 def realizaroutro(acao, saldo):
     cond = True
-    print('Saldo atual: R$', str(saldo).replace('.', ','))
+    print(f'Saldo atual: R$ {saldo:.2f}'.replace('.', ','))
     while cond:
-        print('Realizar outro ' + acao + '? (1) Sim / (2) Não')
+        print(f'Realizar outro {acao}? (1) Sim / (2) Não')
         opcao = input('Opção escolhida: ')
         if tratarErroIntFloat(opcao) == 1 or tratarErroIntFloat(opcao) == 2:
             opcao = trasnformar(tratarErroIntFloat(opcao), opcao)    
             if opcao == 1 or opcao == 2:
+                print()
                 return opcao
             else:
                 print('Opção inválida.')
         else:
             print('Opção inválida.')
-        
+
+def verSaldo(saldo):
+    print()
+    print(f'Seu saldo atual: R$ {saldo:.2f}'.replace('.', ','))
+    print()      
+
 def saque(saldo):
     cond = True
     print()
     print('------ Saque ------')
     while cond:
         print()
-        print('Valor disponível para saque: R$', str(saldo).replace('.', ','))
+        print(f'Valor disponível para saque: R$ {saldo:.2f}'.replace('.', ','))
         saque = confirmaAcao('saque')
-        saldo, validador = verificarSaque(saldo, saque)
-        if validador == 0:
-            return saldo
-        elif validador == 2:
-            print('Saque inválido, saldo menor que o saque pedido.')
-        elif validador == 3:
-            print('O valor não pode ser negativo.') 
+        if saque != True:
+            saldo, validador = verificarSaque(saldo, saque)
+            if validador == 0:
+                return saldo
+            elif validador == 2:
+                print('Saque inválido, saldo menor que o saque pedido.')
+            elif validador == 3:
+                print('O valor não pode ser negativo.')
+        elif saque == True:
+            break
 
 def deposito(saldo):
     cond = True
@@ -119,22 +131,27 @@ def deposito(saldo):
     print('------ Deposito ------')
     while cond:
         print()
-        print('Saldo atual: R$', str(saldo).replace('.', ','))
+        print(f'Saldo atual: R$ {saldo:.2f}'.replace('.', ','))
         deposito = confirmaAcao('deposito')
-        saldo += deposito
-        print('Depósito realizado.')        
-        if realizaroutro('deposito', saldo) == 2:
-            return saldo
+        if deposito != True:
+            saldo += deposito
+            print('Depósito realizado.')        
+            if realizaroutro('deposito', saldo) == 2:
+                return saldo
+        elif deposito == True:
+            break
 
 cond = True
 saldo = 0
 
+print('Bem vindo ao Banco 30 horas.')
+print()
 while cond:
     printOpcao()
     opcao = input('Opção escolhida: ')
     opcao = opcao.upper()
     if opcao == 'A':
-        print(saldo)
+        verSaldo(saldo)
     elif opcao == 'B':
         saldo = saque(saldo)
     elif opcao == 'C':
