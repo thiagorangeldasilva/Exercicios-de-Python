@@ -31,6 +31,20 @@ def trasnformar(tratar, numero):
     elif tratar == 2:
         return int(numero)
 
+def verificarSaque(saldo, saque):
+    if saque >= 0:
+        if (saldo - saque) >= 0:
+            saldo -= saque
+            print('Saque realizado.')        
+            if realizaroutro('saque', saldo) == 2:
+                return saldo, 0
+            else:
+                return saldo, 1
+        else:
+            return saldo, 2            
+    else:
+        return saldo, 3
+        
 def printOpcao():
     print('------ MENU ------')
     print()
@@ -91,13 +105,13 @@ def saque(saldo):
         print()
         print('Valor disponível para saque: R$', str(saldo).replace('.', ','))
         saque = confirmaAcao('saque')
-        if (saldo - saque) > 0:
-            saldo -= saque
-            print('Saque realizado.')        
-            if realizaroutro('saque', saldo) == 2:
-                return saldo
-        else:
+        saldo, validador = verificarSaque(saldo, saque)
+        if validador == 0:
+            return saldo
+        elif validador == 2:
             print('Saque inválido, saldo menor que o saque pedido.')
+        elif validador == 3:
+            print('O valor não pode ser negativo.') 
 
 def deposito(saldo):
     cond = True
@@ -108,7 +122,7 @@ def deposito(saldo):
         print('Saldo atual: R$', str(saldo).replace('.', ','))
         deposito = confirmaAcao('deposito')
         saldo += deposito
-        print('Saque realizado.')        
+        print('Depósito realizado.')        
         if realizaroutro('deposito', saldo) == 2:
             return saldo
 
@@ -117,7 +131,20 @@ saldo = 0
 
 while cond:
     printOpcao()
-    saldo = deposito(saldo)
-    saldo = saque(saldo)
-    break
-input('Obrigado')
+    opcao = input('Opção escolhida: ')
+    opcao = opcao.upper()
+    if opcao == 'A':
+        print(saldo)
+    elif opcao == 'B':
+        saldo = saque(saldo)
+    elif opcao == 'C':
+        saldo = deposito(saldo)
+    elif opcao == 'D':
+        print()
+        print('Agradecemos a preferência! Até logo.')
+        break
+    else:
+        print()
+        print('Opção inválida.')
+        print()
+input()
