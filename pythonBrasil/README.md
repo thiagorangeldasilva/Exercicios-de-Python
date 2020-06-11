@@ -1,3 +1,3 @@
 Nesta pasta irei adicionar uma lista de exercícios.
 
-Os exerciícios foram tirados do https://wiki.python.org.br/ListaDeExercicios
+Os exercícios foram tirados do [PythonBrasil](https://wiki.python.org.br/ListaDeExercicios)
